@@ -43,7 +43,9 @@ public class TransactionOperations {
 	private static String URL = null;
 	private static String USERNAME = null;
 	private static String PASSWORD = null;
-	private static String SELECT_QUERY = "select * from test";
+//	private static String SELECT_QUERY = "select * from public.\"Transactions\"";
+	private static String INSERT_QUERY = "INSERT INTO public.\"Transactions\""
+			+ " (TransactionProperties,Stage,Status,JSONRecord,DetailText) VALUES " + " (?,?,?,?,?);";
 
 	@DisplayName("Save Transaction")
 	@MediaType(value = TEXT_PLAIN, strict = false)
@@ -56,16 +58,33 @@ public class TransactionOperations {
 		} catch (ClassNotFoundException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
+			System.out.println("Error while loading Driver!!!");
+			return "false";
 		}
+//		Below commented code will be used in validate method for Test Connection button
+//		try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+//				PreparedStatement preparedStatement = connection.prepareStatement(SELECT_QUERY);) {
+//			ResultSet rs = preparedStatement.executeQuery();
+//			while (rs.next()) {
+//				System.out.println("resultSet");
+//			}
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
 		try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-				PreparedStatement preparedStatement = connection.prepareStatement(SELECT_QUERY);) {
-			ResultSet rs = preparedStatement.executeQuery();
-			while (rs.next()) {
-				System.out.println("resultSet");
-			}
+			PreparedStatement preparedStatement = connection.prepareStatement(INSERT_QUERY);) {
+			preparedStatement.setString(1, transactionProperties);
+			preparedStatement.setString(2, stage);
+			preparedStatement.setString(3, status);
+			preparedStatement.setString(4, jsonRecord);
+			preparedStatement.setString(5, detailText);
+			preparedStatement.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
+			System.out.println("Error while query execution!!!");
+			return "false";
 		}
-		return "SaveTransaction() executed successfully";
+
+		return "true";
 	}
 }
