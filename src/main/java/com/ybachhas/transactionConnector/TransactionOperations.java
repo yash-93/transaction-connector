@@ -52,6 +52,12 @@ public class TransactionOperations {
 		URL = config.getHost();
 		USERNAME = config.getUsername();
 		PASSWORD = config.getPassword();
+		try {
+			Class.forName("org.postgresql.Driver");
+		} catch (ClassNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
 				PreparedStatement preparedStatement = connection.prepareStatement(SELECT_QUERY);) {
 			ResultSet rs = preparedStatement.executeQuery();
