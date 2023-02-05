@@ -48,7 +48,6 @@ public class TransactionOperations {
 	@DisplayName("Save Transaction")
 	@MediaType(value = TEXT_PLAIN, strict = false)
 	public String SaveTransaction(@Config TransactionConfiguration config) {
-		System.out.println("*************************" + config.getHost() + "*************************");
 		URL = config.getHost();
 		USERNAME = config.getUsername();
 		PASSWORD = config.getPassword();
